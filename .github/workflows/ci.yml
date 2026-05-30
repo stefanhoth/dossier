@@ -17,3 +17,8 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test:coverage
+      - name: npx smoke test
+        run: |
+          npm run build
+          TARBALL=$(npm pack 2>/dev/null)
+          npx "./$TARBALL" --help
