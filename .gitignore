@@ -1,0 +1,13 @@
+node_modules/
+dist/
+*.js.map
+*.d.ts
+*.d.ts.map
+coverage/
+.nyc_output/
+events/
+*.jsonl
+!schemas/*/examples.jsonl
+*.sha256
+ael.config.yaml
+.DS_Store
