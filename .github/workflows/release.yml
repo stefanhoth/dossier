@@ -19,59 +19,54 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run test
-      - name: Compute CALVER tag
+
+      - name: Compute CalVer tag
         id: calver
         run: |
-          BASE=$(date -u +%Y.%m.%d)
-          COUNT=$(git tag --list "${BASE}*" | wc -l | tr -d ' ')
-          if [ "$COUNT" -eq "0" ]; then
-            TAG="$BASE"
-          else
-            TAG="${BASE}.${COUNT}"
-          fi
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          BASE=$(date -u +"%Y.%m.%d")
+          VERSION="$BASE"
+          COUNTER=0
+          while git ls-remote --tags origin "refs/tags/${VERSION}" | grep -q .; do
+            COUNTER=$((COUNTER + 1))
+            VERSION="${BASE}.${COUNTER}"
+          done
+          echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
+
       - name: Bump version in package.json
         run: npm version "${{ steps.calver.outputs.tag }}" --no-git-tag-version
       - name: Build
         run: npm run build
+
+      - name: Create Draft Release via GH CLI
+        id: create_release
+        run: |
+          gh release create "${{ steps.calver.outputs.tag }}" --draft --generate-notes
+          EOF=$(dd if=/dev/urandom bs=15 count=1 2>/dev/null | base64)
+          echo "notes<<$EOF" >> "$GITHUB_OUTPUT"
+          gh release view "${{ steps.calver.outputs.tag }}" --json body --jq .body >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update CHANGELOG.md
         run: |
-          TAG="${{ steps.calver.outputs.tag }}"
-          DATE=$(date -u +%Y-%m-%d)
-          LAST_TAG=$(git tag --sort=-version:refname | head -1)
-          if [ -n "$LAST_TAG" ]; then
-            NOTES=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
-          else
-            NOTES=$(git log --pretty=format:"- %s" --no-merges)
-          fi
-          [ -z "$NOTES" ] && NOTES="- Maintenance / dependency updates"
-          ENTRY="## ${TAG} (${DATE})\n\n${NOTES}\n"
-          if [ -f CHANGELOG.md ]; then
-            EXISTING=$(cat CHANGELOG.md)
-            printf "# Changelog\n\n${ENTRY}\n${EXISTING#*$'\n\n'}" > CHANGELOG.md
-          else
-            printf "# Changelog\n\n${ENTRY}\n" > CHANGELOG.md
-          fi
-      - name: Configure git
+          touch CHANGELOG.md
+          printf "## Release %s\n\n%s\n\n---\n\n" \
+            "${{ steps.calver.outputs.tag }}" \
+            "${{ steps.create_release.outputs.notes }}" \
+            | cat - CHANGELOG.md > TEMP_CHANGELOG.md && mv TEMP_CHANGELOG.md CHANGELOG.md
+
+      - name: Commit and Publish
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-      - name: Commit and push CHANGELOG.md
-        run: |
-          git add CHANGELOG.md package.json
-          git diff --staged --quiet || git commit -m "chore(release): ${{ steps.calver.outputs.tag }}"
-          git push origin main
-      - name: Create git tag
-        run: |
-          git tag "${{ steps.calver.outputs.tag }}"
-          git push origin "${{ steps.calver.outputs.tag }}"
-      - name: Create GitHub Release
+          git add CHANGELOG.md
+          git commit -m "docs: update changelog for ${{ steps.calver.outputs.tag }} [skip ci]"
+          git push origin HEAD
+          gh release edit "${{ steps.calver.outputs.tag }}" --draft=false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "${{ steps.calver.outputs.tag }}" \
-            --title "Release ${{ steps.calver.outputs.tag }}" \
-            --notes-file <(git log "$(git tag --sort=-version:refname | sed -n '2p')..$(git tag --sort=-version:refname | head -1)" --pretty=format:"- %s" --no-merges || echo "Initial release")
+
       - name: Publish to npm
         run: npm publish --access public
         env:
