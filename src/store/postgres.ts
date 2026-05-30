@@ -7,11 +7,12 @@ import type { AgentEvent } from '../shared/types.js';
 import type { IStore, ReadOptions } from './interface.js';
 
 export class PostgresStore implements IStore {
-  constructor(_connectionString: string) {
+  constructor(connectionString: string) {
+    void connectionString;
     throw new Error('PostgresStore not yet implemented. Use FileStore (default).');
   }
-  async append(_event: AgentEvent): Promise<void> { throw new Error('Not implemented'); }
-  async readRange(_options: ReadOptions): Promise<AgentEvent[]> { throw new Error('Not implemented'); }
-  async readRawLines(_date?: string): Promise<string[]> { throw new Error('Not implemented'); }
-  async appendDlq(_rawLine: string, _reason: string): Promise<void> { throw new Error('Not implemented'); }
+  async append(event: AgentEvent): Promise<void> { void event; throw new Error('Not implemented'); }
+  async readRange(options: ReadOptions): Promise<AgentEvent[]> { void options; throw new Error('Not implemented'); }
+  async readRawLines(date?: string): Promise<string[]> { void date; throw new Error('Not implemented'); }
+  async appendDlq(rawLine: string, reason: string): Promise<void> { void rawLine; void reason; throw new Error('Not implemented'); }
 }
