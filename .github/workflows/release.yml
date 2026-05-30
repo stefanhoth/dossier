@@ -1,7 +1,9 @@
 name: Release
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+
+  schedule:
+    - cron: '18 3 * * *'
 jobs:
   release:
     runs-on: ubuntu-latest
