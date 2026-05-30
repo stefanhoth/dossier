@@ -29,6 +29,12 @@ As your agent protocol evolves, `dossier migrate` forward-migrates old log files
 
 ## Installation
 
+**Zero-install via npx** (recommended — no version conflicts):
+```bash
+npx @stefanhoth/dossier --help
+```
+
+**Global install** (for frequent use):
 ```bash
 npm install -g @stefanhoth/dossier
 ```
@@ -37,16 +43,16 @@ npm install -g @stefanhoth/dossier
 
 ```bash
 # 1. Initialize workspace
-dossier init
+npx @stefanhoth/dossier init
 
 # 2. Write an event (e.g. from an orchestrator handing off to a sub-agent)
-echo '{"action":"delegate","status":"completed","agent":"planner","_meta":{"traceId":"wf-001"}}' | dossier write
+echo '{"action":"delegate","status":"completed","agent":"planner","_meta":{"traceId":"wf-001"}}' | npx @stefanhoth/dossier write
 
 # 3. Sub-agent appends its result to the same trace
-echo '{"action":"execute","status":"completed","agent":"executor","_meta":{"traceId":"wf-001"}}' | dossier write
+echo '{"action":"execute","status":"completed","agent":"executor","_meta":{"traceId":"wf-001"}}' | npx @stefanhoth/dossier write
 
 # 4. Verify the chain is intact
-dossier verify events/$(date +%Y-%m-%d).jsonl
+npx @stefanhoth/dossier verify events/$(date +%Y-%m-%d).jsonl
 ```
 
 ## Command reference

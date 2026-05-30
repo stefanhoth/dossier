@@ -19,6 +19,15 @@ Use this skill when asked to:
 - Build an audit export package for compliance
 - Inspect or manage the Dead Letter Queue
 
+## Invocation
+
+`dossier` can be called as a global install or via npx — prefer npx in agent environments to avoid Node version conflicts:
+
+```bash
+npx @stefanhoth/dossier <command>   # zero-install, always latest
+dossier <command>                    # if installed globally
+```
+
 ## Command reference
 
 | Command | Purpose |
