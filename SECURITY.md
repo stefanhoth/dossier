@@ -19,8 +19,6 @@ Use GitHub's private vulnerability reporting instead:
 2. Click **"Report a vulnerability"**
 3. Fill in a description, reproduction steps, and the potential impact
 
-You can also reach the maintainer directly at **stefanhoth.de@gmail.com** with the subject line `[dossier] Security disclosure`.
-
 ### What to expect
 
 | Step | Timeline |
