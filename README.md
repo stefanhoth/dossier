@@ -108,6 +108,36 @@ Every event line MUST include `_meta.schemaVersion`, `timestamp`, `traceId`, `se
 
 See [references/spec.md](references/spec.md) for the full specification.
 
+## Using the Claude Code skill
+
+`dossier` ships a `SKILL.md` that teaches Claude Code when and how to use the CLI — including proactive logging decisions, agent-to-agent handoff patterns, and audit workflows.
+
+### Install via the skills CLI (recommended)
+
+```bash
+# Project scope (adds to .claude/skills/ in current directory)
+npx skills add stefanhoth/dossier
+
+# Global scope (available in every project)
+npx skills add stefanhoth/dossier --global
+```
+
+### Manual install
+
+```bash
+# Project scope
+mkdir -p .claude/skills/dossier
+curl -fsSL https://raw.githubusercontent.com/stefanhoth/dossier/main/skills/dossier/SKILL.md \
+  > .claude/skills/dossier/SKILL.md
+
+# Global scope
+mkdir -p ~/.claude/skills/dossier
+curl -fsSL https://raw.githubusercontent.com/stefanhoth/dossier/main/skills/dossier/SKILL.md \
+  > ~/.claude/skills/dossier/SKILL.md
+```
+
+Once installed, Claude Code picks up the skill automatically — no restart needed.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
