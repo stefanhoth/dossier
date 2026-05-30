@@ -6,7 +6,7 @@ export default defineConfig({
     include: ['tests/**/*.test.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
+      reporter: process.env.GITHUB_ACTIONS ? ['text', 'lcov', 'github-actions'] : ['text', 'lcov'],
       include: ['src/**/*.ts'],
     },
   },
