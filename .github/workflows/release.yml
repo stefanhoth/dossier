@@ -1,0 +1,75 @@
+name: Release
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '18 3 * * *'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run test
+
+      - name: Compute CalVer tag
+        id: calver
+        run: |
+          BASE=$(date -u +"%Y.%m.%d")
+          VERSION="$BASE"
+          COUNTER=0
+          while git ls-remote --tags origin "refs/tags/${VERSION}" | grep -q .; do
+            COUNTER=$((COUNTER + 1))
+            VERSION="${BASE}.${COUNTER}"
+          done
+          echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Bump version in package.json
+        run: npm version "${{ steps.calver.outputs.tag }}" --no-git-tag-version
+      - name: Build
+        run: npm run build
+
+      - name: Create Draft Release via GH CLI
+        id: create_release
+        run: |
+          gh release create "${{ steps.calver.outputs.tag }}" --draft --generate-notes
+          EOF=$(dd if=/dev/urandom bs=15 count=1 2>/dev/null | base64)
+          echo "notes<<$EOF" >> "$GITHUB_OUTPUT"
+          gh release view "${{ steps.calver.outputs.tag }}" --json body --jq .body >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update CHANGELOG.md
+        run: |
+          touch CHANGELOG.md
+          printf "## Release %s\n\n%s\n\n---\n\n" \
+            "${{ steps.calver.outputs.tag }}" \
+            "${{ steps.create_release.outputs.notes }}" \
+            | cat - CHANGELOG.md > TEMP_CHANGELOG.md && mv TEMP_CHANGELOG.md CHANGELOG.md
+
+      - name: Commit and Publish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "docs: update changelog for ${{ steps.calver.outputs.tag }} [skip ci]"
+          git push origin HEAD
+          gh release edit "${{ steps.calver.outputs.tag }}" --draft=false
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
