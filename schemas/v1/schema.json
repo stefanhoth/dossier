@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent Event v1",
+  "type": "object",
+  "required": ["_meta", "action", "status"],
+  "additionalProperties": true,
+  "properties": {
+    "_meta": {
+      "type": "object",
+      "required": ["schemaVersion","timestamp","traceId","seqNo","prevHash"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "type": "integer" },
+        "timestamp":     { "type": "string", "format": "date-time" },
+        "traceId":       { "type": "string", "minLength": 1 },
+        "seqNo":         { "type": "integer", "minimum": 1 },
+        "prevHash":      { "type": "string", "minLength": 1 },
+        "eventId":       { "type": "string" },
+        "agent":         { "type": "string" }
+      }
+    },
+    "action": { "type": "string" },
+    "status": { "type": "string", "enum": ["pending","completed","failed"] }
+  }
+}
