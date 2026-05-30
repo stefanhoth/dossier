@@ -1,10 +1,12 @@
-import Ajv from 'ajv';
+import Ajv2020 from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
 import { loadRegistry, loadSchemaJson } from './registry.js';
 import { UnknownSchemaError, SchemaValidationError } from '../shared/errors.js';
 
-const ajv = new Ajv({ allErrors: true });
-addFormats(ajv);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ajv = new (Ajv2020 as any)({ allErrors: true });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(addFormats as any)(ajv);
 
 const schemaCache = new Map<number, ReturnType<typeof ajv.compile>>();
 
@@ -30,7 +32,7 @@ export function validateEvent(event: unknown, schemasDir: string): void {
   const validate = getValidator(schemasDir, version);
   const valid = validate(event);
   if (!valid) {
-    const errors = (validate.errors ?? []).map(e => `${e.instancePath} ${e.message}`);
+    const errors = (validate.errors ?? []).map((e: { instancePath: string; message?: string }) => `${e.instancePath} ${e.message}`);
     throw new SchemaValidationError(errors);
   }
 }
