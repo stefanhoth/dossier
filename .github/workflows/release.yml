@@ -1,0 +1,55 @@
+name: Release
+on:
+  push:
+    branches: [main]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run test
+      - name: Compute CALVER tag
+        id: calver
+        run: |
+          BASE=$(date -u +%Y.%m.%d)
+          COUNT=$(git tag --list "${BASE}*" | wc -l | tr -d ' ')
+          if [ "$COUNT" -eq "0" ]; then
+            TAG="$BASE"
+          else
+            TAG="${BASE}.${COUNT}"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+      - name: Bump version in package.json
+        run: npm version "${{ steps.calver.outputs.tag }}" --no-git-tag-version
+      - name: Build
+        run: npm run build
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Create git tag
+        run: |
+          git tag "${{ steps.calver.outputs.tag }}"
+          git push origin "${{ steps.calver.outputs.tag }}"
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.calver.outputs.tag }}" \
+            --title "Release ${{ steps.calver.outputs.tag }}" \
+            --generate-notes
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
