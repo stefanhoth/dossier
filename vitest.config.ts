@@ -4,9 +4,10 @@ export default defineConfig({
   test: {
     globals: true,
     include: ['tests/**/*.test.ts'],
+    reporter: process.env.GITHUB_ACTIONS ? ['github-actions'] : ['verbose'],
     coverage: {
       provider: 'v8',
-      reporter: process.env.GITHUB_ACTIONS ? ['text', 'lcov', 'github-actions'] : ['text', 'lcov'],
+      reporter: ['text', 'lcov'],
       include: ['src/**/*.ts'],
     },
   },
