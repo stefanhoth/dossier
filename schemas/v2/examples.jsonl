@@ -1,0 +1,2 @@
+{"_meta":{"schemaVersion":2,"timestamp":"2026-05-30T14:22:00Z","traceId":"wf-abc","seqNo":1,"prevHash":"genesis","eventId":"evt-001","agent":"researcher"},"action":"synthesize","status":"completed","sources":["doc-001"],"result":{"confidence":0.92}}
+{"_meta":{"schemaVersion":2,"timestamp":"2026-05-30T14:22:01Z","traceId":"wf-abc","seqNo":2,"prevHash":"a3f9d1c2b4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1","eventId":"evt-002","agent":"reviewer"},"action":"validate","status":"completed"}
