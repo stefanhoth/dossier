@@ -6,6 +6,8 @@ import { registerValidate } from './commands/validate.js';
 import { registerVerify } from './commands/verify.js';
 import { registerMigrate } from './commands/migrate.js';
 import { registerSchema } from './commands/schema-cmd.js';
+import { registerAudit } from './commands/audit.js';
+import { registerDlq } from './commands/dlq.js';
 import { AppError } from './shared/errors.js';
 
 const program = new Command();
@@ -18,6 +20,8 @@ registerValidate(program);
 registerVerify(program);
 registerMigrate(program);
 registerSchema(program);
+registerAudit(program);
+registerDlq(program);
 
 program.parseAsync().catch((err: unknown) => {
   if (err instanceof AppError) { console.error(`Error: ${err.message}`); process.exit(err.code); }
