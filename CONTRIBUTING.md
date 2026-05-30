@@ -1,5 +1,9 @@
 # Contributing
 
+## Security
+
+To report a security vulnerability, please follow the [security policy](SECURITY.md) — do not open a public issue.
+
 ## Commit convention
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
