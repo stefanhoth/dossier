@@ -1,5 +1,5 @@
 {
-  "name": "@stefanhoth/ael",
+  "name": "@stefanhoth/dossier",
   "version": "0.0.0",
   "description": "Agent Event Log CLI – implements Agent Data Format Spec v2.0",
   "type": "module",

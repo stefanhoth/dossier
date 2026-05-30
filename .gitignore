@@ -1,8 +1,6 @@
+# Project-specific
 node_modules/
 dist/
-*.js.map
-*.d.ts
-*.d.ts.map
 coverage/
 .nyc_output/
 events/
@@ -10,4 +8,48 @@ events/
 !schemas/*/examples.jsonl
 *.sha256
 ael.config.yaml
+
+# TypeScript
+*.tsbuildinfo
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+jspm_packages/
+
+# Optional caches
+.npm
+.eslintcache
+.stylelintcache
+.node_repl_history
+
+# Build artifacts
+build/Release
+*.tgz
+
+# dotenv
+.env
+.env.*
+!.env.example
+
+# OS
 .DS_Store
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+.vite/
