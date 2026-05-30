@@ -33,7 +33,7 @@ export function registerInit(program: Command): void {
       [eventsDir, resolve(eventsDir, '.seq'), resolve(eventsDir, '.pii'),
        resolve(eventsDir, 'archive'), schemasDir].forEach(d => mkdirSync(d, { recursive: true }));
 
-      const configPath = resolve(dir, 'ael.config.yaml');
+      const configPath = resolve(dir, 'dossier.config.yaml');
       if (!existsSync(configPath)) writeFileSync(configPath, DEFAULT_CONFIG, 'utf8');
 
       const registryPath = resolve(schemasDir, 'registry.json');
@@ -41,7 +41,7 @@ export function registerInit(program: Command): void {
         writeFileSync(registryPath, JSON.stringify(REGISTRY, null, 2), 'utf8');
       }
 
-      console.log('Initialized ael workspace.');
+      console.log('Initialized dossier workspace.');
       console.log(`  Events:  ${eventsDir}`);
       console.log(`  Schemas: ${schemasDir}`);
       console.log(`  Config:  ${configPath}`);

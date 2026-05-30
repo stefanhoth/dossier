@@ -17,7 +17,7 @@ export const DEFAULT_CONFIG: AelConfig = {
 };
 
 export function loadConfig(dir = '.'): AelConfig {
-  const configPath = resolve(dir, 'ael.config.yaml');
+  const configPath = resolve(dir, 'dossier.config.yaml');
   if (!existsSync(configPath)) return DEFAULT_CONFIG;
   const raw = readFileSync(configPath, 'utf8');
   const parsed = parseYaml(raw) as Partial<AelConfig>;
