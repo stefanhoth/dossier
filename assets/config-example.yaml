@@ -1,0 +1,8 @@
+storage:
+  backend: file
+  dir: ./events
+  retentionDays: 30
+privacy:
+  enabled: false
+  piiStoreDir: ./events/.pii
+currentSchemaVersion: 2
