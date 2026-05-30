@@ -12,7 +12,7 @@
 
 ## Creating a new schema version
 
-1. Run `ael schema add <N>` to scaffold `schemas/vN/`
+1. Run `dossier schema add <N>` to scaffold `schemas/vN/`
 2. Edit `schemas/vN/schema.json` – extend from previous version
 3. Implement `from_v{N-1}` in `schemas/vN/migration.ts`
 4. Add representative examples to `schemas/vN/examples.jsonl`
@@ -39,7 +39,7 @@ Migrations live at the **target version**. To migrate v1 → v3:
 ## Deprecating a version
 
 ```bash
-ael schema deprecate <N>
+dossier schema deprecate <N>
 ```
 
 Marks the version as `deprecated` with today's date. After ≥ 6 months, it can be sunsetted.

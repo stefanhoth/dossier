@@ -1,4 +1,4 @@
-# ael – Agent Event Log CLI
+# dossier – Agent Event Log CLI
 
 JSONL audit trail tool implementing [Agent Data Format Spec v2.0](references/spec.md). Append-only, hash-chained, schema-versioned, GDPR-compliant event logs for agent-to-agent communication.
 
@@ -15,40 +15,40 @@ JSONL audit trail tool implementing [Agent Data Format Spec v2.0](references/spe
 ## Installation
 
 ```bash
-npm install -g @stefanhoth/ael
+npm install -g @stefanhoth/dossier
 ```
 
 ## Quick start
 
 ```bash
 # 1. Initialize workspace
-ael init
+dossier init
 
 # 2. Write your first event
-echo '{"action":"synthesize","status":"completed","_meta":{"traceId":"wf-demo"}}' | ael write
+echo '{"action":"synthesize","status":"completed","_meta":{"traceId":"wf-demo"}}' | dossier write
 
 # 3. Verify the chain
-ael verify events/$(date +%Y-%m-%d).jsonl
+dossier verify events/$(date +%Y-%m-%d).jsonl
 ```
 
 ## Command reference
 
 | Command | Description |
 |---|---|
-| `ael init [--dir <path>]` | Initialize workspace |
-| `ael write [--trace <id>] [--agent <name>]` | Write event from stdin |
-| `ael read [--trace <id>] [--from-seq N] [--to-seq M] [--migrate]` | Read/filter events |
-| `ael validate <file>` | Validate schema compliance |
-| `ael verify <file>` | Verify hash-chain integrity |
-| `ael migrate <file> --to <version> [--output <file>]` | Forward-migrate events |
-| `ael schema list\|add\|deprecate` | Manage schema versions |
-| `ael audit export [--from <date>] [--to <date>] [--output <dir>]` | Build audit package |
-| `ael dlq list\|inspect <n>` | Inspect Dead Letter Queue |
-| `ael privacy shred <subject>` | Delete PII (right to be forgotten) |
+| `dossier init [--dir <path>]` | Initialize workspace |
+| `dossier write [--trace <id>] [--agent <name>]` | Write event from stdin |
+| `dossier read [--trace <id>] [--from-seq N] [--to-seq M] [--migrate]` | Read/filter events |
+| `dossier validate <file>` | Validate schema compliance |
+| `dossier verify <file>` | Verify hash-chain integrity |
+| `dossier migrate <file> --to <version> [--output <file>]` | Forward-migrate events |
+| `dossier schema list\|add\|deprecate` | Manage schema versions |
+| `dossier audit export [--from <date>] [--to <date>] [--output <dir>]` | Build audit package |
+| `dossier dlq list\|inspect <n>` | Inspect Dead Letter Queue |
+| `dossier privacy shred <subject>` | Delete PII (right to be forgotten) |
 
 ## Configuration
 
-`ael.config.yaml` (created by `ael init`):
+`dossier.config.yaml` (created by `dossier init`):
 
 ```yaml
 storage:

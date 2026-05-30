@@ -15,13 +15,13 @@ Scopes: `core`, `schema`, `integrity`, `privacy`, `store`, `commands`, `shared`
 
 ## Adding a schema version
 
-1. `ael schema add <N>` – scaffolds `schemas/vN/`
+1. `dossier schema add <N>` – scaffolds `schemas/vN/`
 2. Edit `schemas/vN/schema.json` – add/remove fields per breaking/compatible change rules
 3. Edit `schemas/vN/migration.ts` – implement `from_v{N-1}`
 4. Add examples to `schemas/vN/examples.jsonl`
 5. Update `schemas/registry.json` – set version state to `active`
 6. Run `npm test` to verify migration unit tests pass
-7. Deprecate old version if ≥ 6 months old: `ael schema deprecate <N-1>`
+7. Deprecate old version if ≥ 6 months old: `dossier schema deprecate <N-1>`
 
 ## Running tests
 

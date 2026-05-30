@@ -4,28 +4,28 @@
 
 ### 1. Verify chain integrity
 ```bash
-ael verify events/YYYY-MM-DD.jsonl
+dossier verify events/YYYY-MM-DD.jsonl
 ```
 Expected output: `OK – chain intact (N events)`
 If chain break: stop – investigate before proceeding.
 
 ### 2. Validate schema compliance
 ```bash
-ael validate events/YYYY-MM-DD.jsonl
+dossier validate events/YYYY-MM-DD.jsonl
 ```
 Expected: `OK – N events valid`
 Failures show line number and validation errors.
 
 ### 3. Inspect errors
 ```bash
-ael dlq list
-ael dlq inspect <n>
+dossier dlq list
+dossier dlq inspect <n>
 ```
 Each DLQ entry includes the original raw line and failure reason.
 
 ### 4. Build audit package
 ```bash
-ael audit export --from 2026-05-01 --to 2026-05-30 --output ./audit-2026-05
+dossier audit export --from 2026-05-01 --to 2026-05-30 --output ./audit-2026-05
 ```
 
 The package contains:

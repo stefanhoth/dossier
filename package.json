@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Agent Event Log CLI – implements Agent Data Format Spec v2.0",
   "type": "module",
-  "bin": { "ael": "./bin/ael.js" },
+  "bin": { "dossier": "./bin/dossier.js" },
   "main": "./dist/cli.js",
   "files": ["dist", "bin", "schemas"],
   "scripts": {
