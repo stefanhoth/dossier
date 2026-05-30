@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync, copyFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { loadRegistry } from '../schema/registry.js';
 
