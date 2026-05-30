@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { registerInit } from './commands/init.js';
 import { registerWrite } from './commands/write.js';
+import { registerRead } from './commands/read.js';
 import { registerValidate } from './commands/validate.js';
 import { registerVerify } from './commands/verify.js';
 import { AppError } from './shared/errors.js';
@@ -10,6 +11,7 @@ program.name('dossier').description('Agent Event Log CLI – implements Agent Da
 
 registerInit(program);
 registerWrite(program);
+registerRead(program);
 registerValidate(program);
 registerVerify(program);
 
