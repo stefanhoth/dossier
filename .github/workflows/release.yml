@@ -53,7 +53,8 @@ jobs:
       - name: Update CHANGELOG.md
         run: |
           touch CHANGELOG.md
-          printf "## Release %s\n\n%s\n\n---\n\n" \
+          printf "## [Release %s](https://github.com/stefanhoth/dossier/releases/tag/%s)\n\n%s\n\n---\n\n" \
+            "${{ steps.calver.outputs.tag }}" \
             "${{ steps.calver.outputs.tag }}" \
             "${{ steps.create_release.outputs.notes }}" \
             | cat - CHANGELOG.md > TEMP_CHANGELOG.md && mv TEMP_CHANGELOG.md CHANGELOG.md
