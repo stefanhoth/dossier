@@ -1,4 +1,4 @@
-## Release 2026.05.31
+## [Release 2026.05.31](https://github.com/stefanhoth/dossier/releases/tag/2026.05.31)
 
 ## What's Changed
 * feat(phase-1): core modules, schema registry, and validation by @stefanhoth in https://github.com/stefanhoth/dossier/pull/15
