@@ -1,3 +1,13 @@
+## [Release 2026.06.01](https://github.com/stefanhoth/dossier/releases/tag/2026.06.01)
+
+## What's Changed
+* fix: link CHANGELOG release headings to GitHub releases by @stefanhoth in https://github.com/stefanhoth/dossier/pull/41
+
+
+**Full Changelog**: https://github.com/stefanhoth/dossier/compare/2026.05.31...2026.06.01
+
+---
+
 ## [Release 2026.05.31](https://github.com/stefanhoth/dossier/releases/tag/2026.05.31)
 
 ## What's Changed
