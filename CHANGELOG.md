@@ -1,3 +1,9 @@
+## [Release 2026.06.07](https://github.com/stefanhoth/dossier/releases/tag/2026.06.07)
+
+**Full Changelog**: https://github.com/stefanhoth/dossier/compare/2026.06.05...2026.06.07
+
+---
+
 ## [Release 2026.06.06](https://github.com/stefanhoth/dossier/releases/tag/2026.06.06)
 
 **Full Changelog**: https://github.com/stefanhoth/dossier/compare/2026.06.04...2026.06.06
