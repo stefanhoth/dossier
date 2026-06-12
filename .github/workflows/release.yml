@@ -4,8 +4,39 @@ on:
 
   schedule:
     - cron: '18 3 * * *'
+
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check.outputs.has_changes }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for new commits since last release
+        id: check
+        run: |
+          LAST_TAG=$(git tag --sort=-version:refname | head -1)
+          if [ -z "$LAST_TAG" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "### No previous tag — proceeding with first release." >> "$GITHUB_STEP_SUMMARY"
+          else
+            COUNT=$(git log "${LAST_TAG}..HEAD" --oneline --no-merges \
+              --invert-grep --grep='update changelog' \
+              | wc -l | tr -d ' ')
+            if [ "$COUNT" -gt 0 ]; then
+              echo "has_changes=true" >> "$GITHUB_OUTPUT"
+              echo "### :rocket: ${COUNT} new commit(s) since \`${LAST_TAG}\` — will release." >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "has_changes=false" >> "$GITHUB_OUTPUT"
+              echo "### :zzz: No new commits since \`${LAST_TAG}\` — skipping release." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
+
   release:
+    needs: check
+    if: needs.check.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
