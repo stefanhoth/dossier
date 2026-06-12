@@ -9,13 +9,13 @@ jobs:
   check:
     runs-on: ubuntu-latest
     outputs:
-      has_changes: ${{ steps.check.outputs.has_changes }}
+      is_ready: ${{ steps.gate.outputs.is_ready }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Check for new commits since last release
-        id: check
+        id: commits
         run: |
           LAST_TAG=$(git tag --sort=-version:refname | head -1)
           if [ -z "$LAST_TAG" ]; then
@@ -33,10 +33,29 @@ jobs:
               echo "### :zzz: No new commits since \`${LAST_TAG}\` — skipping release." >> "$GITHUB_STEP_SUMMARY"
             fi
           fi
+      - name: Check NPM_TOKEN
+        id: npm
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then
+            echo "npm_ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "npm_ready=false" >> "$GITHUB_OUTPUT"
+            echo "### :warning: \`NPM_TOKEN\` secret is not set — skipping release. See issue [#45](https://github.com/stefanhoth/dossier/issues/45)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Gate
+        id: gate
+        run: |
+          if [ "${{ steps.commits.outputs.has_changes }}" == "true" ] && [ "${{ steps.npm.outputs.npm_ready }}" == "true" ]; then
+            echo "is_ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_ready=false" >> "$GITHUB_OUTPUT"
+          fi
 
   release:
     needs: check
-    if: needs.check.outputs.has_changes == 'true'
+    if: needs.check.outputs.is_ready == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
